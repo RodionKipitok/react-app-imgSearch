@@ -1,16 +1,26 @@
-export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
-  );
+import React, { Component } from 'react';
+import Searchbar from './Searchbar/Searchbar';
+import fetchImages from './API/PixabayAPI';
+
+console.log(fetchImages());
+
+
+
+class App extends Component {
+
+  state = {
+    img: []
+  }
+
+
+
+
+    render(){
+
+      return <Searchbar/>
+    }
+
 };
+
+
+export default App
