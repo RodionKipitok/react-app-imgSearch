@@ -1,12 +1,17 @@
 import React from 'react';
 
-const ImageGalleryItem = () => {
 
+const ImageGalleryItem = ({ queryImg }) => {
+  console.log(queryImg);
 
   return (
-    <li class="gallery-item">
-      <img src="" alt="" />
-    </li>
+    <ul className="gallery">
+      {queryImg.map(item => (
+        <li key={item.id} className="gallery-item">
+        <img src={item.webformatURL} alt="" />
+      </li>
+      ))}
+    </ul>
   );
 };
 
