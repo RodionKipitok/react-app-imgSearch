@@ -27,7 +27,7 @@ class App extends Component {
     evt.preventDefault();
     console.log(evt.target[1].value);
     let searchQuery = evt.target[1].value;
-    let currentPage = 1;
+    // let currentPage = 1;
     const response = await fetchImages(searchQuery);
     console.log(response);
 
