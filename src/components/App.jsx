@@ -10,23 +10,32 @@ class App extends Component {
     valuesInput: '',
   };
 
-  async componentDidMount() {
-    let queryImg = await fetchImages();
+  // async componentDidMount() {
+  //   let queryImg = await fetchImages(this.state.valuesInput);
+  //   console.log(queryImg);
 
-    this.setState(prevState => {
-      return { img: [...queryImg] };
-    });
-  }
+  //   this.setState(prevState => {
+  //     return { img: [...queryImg] };
+  //   });
+  // }
 
   handleChange = evt => {
     this.setState({ valuesInput: evt.target.value });
   };
 
-  handleSubmit = evt => {
+  handleSubmit = async evt => {
     evt.preventDefault();
-
-    fetchImages(evt.target[1].value);
     console.log(evt.target[1].value);
+    let searchQuery = evt.target[1].value;
+    let currentPage = 1;
+    const response = await fetchImages(searchQuery);
+    console.log(response);
+
+    this.setState(prevState => {
+          return { img: [...response] };
+        });
+
+
   };
 
   render() {
