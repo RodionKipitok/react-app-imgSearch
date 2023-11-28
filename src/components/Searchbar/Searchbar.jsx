@@ -1,14 +1,13 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import css from '../Searchbar/Searchbar.module.css';
-import fetchImages from 'components/API/PixabayAPI';
+
 
 const initialValues = {
   queryImg: '',
 };
 
 const Searchbar = ({ onSubmit }) => {
-  
   const handleOnSubmit = async (values, actions) => {
     const { queryImg } = values;
     actions.resetForm();
