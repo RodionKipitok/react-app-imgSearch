@@ -38,3 +38,11 @@ html {
 	grid-gap: 16px;
 	padding-bottom: 24px;
  }
+
+ .wraper{
+	width: 200px;
+	height: 20px;
+	margin-top: 50px;
+	margin-left: auto;
+	margin-right: auto;
+ }

@@ -1,64 +1,63 @@
 import React, { Component } from 'react';
 import Searchbar from './Searchbar/Searchbar';
-import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
-import fetchImages from './API/PixabayAPI';
+import ImageGalleryItems from './ImageGalleryItem/ImageGalleryItem';
+import fetchImag from './API/PixabayAPI';
 import { Bars } from 'react-loader-spinner';
+import Button from './Button/Buttom';
 
 class App extends Component {
   state = {
     img: [],
-    valuesInput: '',
+    queryImg: '',
+    currentPage: 1,
+    currentHits: 0,
   };
 
-  // async componentDidMount() {
-  //   let queryImg = await fetchImages(this.state.valuesInput);
-  //   console.log(queryImg);
+ 
 
-  //   this.setState(prevState => {
-  //     return { img: [...queryImg] };
-  //   });
-  // }
+  addStateImg = async nameImg => {
+    try {
+      const { currentPage } = this.state;
+      const response = await fetchImag(nameImg, currentPage);
 
-  handleChange = evt => {
-    this.setState({ valuesInput: evt.target.value });
+      const { hits: arrImgAdd } = response;
+
+      this.setState(() => ({
+        img: [...arrImgAdd],
+      }));
+
+      this.setState(() => ({
+        queryImg: nameImg,
+      }));
+    } catch (error) {
+      console.log(error());
+    }
   };
 
-  handleSubmit = async evt => {
-    evt.preventDefault();
-    console.log(evt.target[1].value);
-    let searchQuery = evt.target[1].value;
-    // let currentPage = 1;
-    const response = await fetchImages(searchQuery);
-    console.log(response);
-
-    this.setState(prevState => {
-          return { img: [...response] };
-        });
-
-
+  loadMore = () => {
+    this.setState((prevState) => ({
+      currentPage: prevState.currentPage + 1
+    }));
   };
 
   render() {
     return (
       <>
-        <Searchbar
-          onChange={this.handleChange}
-          values={this.state.valuesInput}
-          onSubmit={this.handleSubmit}
-        />
+        <Searchbar onSubmit={this.addStateImg} />
         {this.state.img.length > 0 ? (
-          <ImageGalleryItem queryImg={this.state.img} />
+          <ImageGalleryItems queryImg={this.state.img} />
         ) : (
           <Bars
             height="80"
             width="80"
-            color="#4fa94d"
+            color="#3f51b5"
             ariaLabel="bars-loading"
             wrapperStyle={{}}
-            wrapperClass=""
+            wrapperClass="wraper"
             visible={true}
           />
         )}
+        <Button onClick={this.loadMore} />
       </>
     );
   }
