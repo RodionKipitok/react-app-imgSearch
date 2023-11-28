@@ -22,16 +22,5 @@ const ImageGalleryItems = ({queryImg}) => {
 
 export default ImageGalleryItems;
 
-{
-  /* <ul className={css.ImageGallery}>
-      {queryImg.map(item => (
-        <li key={item.id} className={css.ImageGalleryItem}>
-          <img
-            className={css.ImageGalleryItemImage}
-            src={item.webformatURL}
-            alt="" 
-          />
-        </li>
-      ))}
-    </ul> */
-}
+
+
