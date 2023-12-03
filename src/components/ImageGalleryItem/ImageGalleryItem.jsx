@@ -22,4 +22,3 @@ const ImageGalleryItems = ({queryImg}) => {
 
 export default ImageGalleryItems;
 
-
