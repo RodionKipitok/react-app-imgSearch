@@ -2,16 +2,20 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import css from '../Searchbar/Searchbar.module.css';
 
-
 const initialValues = {
   queryImg: '',
 };
 
-const Searchbar = ({ onSubmit }) => {
+const Searchbar =({addStateImg}) => {
+
+
   const handleOnSubmit = async (values, actions) => {
     const { queryImg } = values;
+     addStateImg(queryImg)
     actions.resetForm();
-    onSubmit(queryImg);
+    
+
+    console.log(queryImg);
   };
 
   return (
