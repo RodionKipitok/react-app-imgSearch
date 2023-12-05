@@ -43,7 +43,7 @@ class App extends Component {
   };
 
   getImgDate = data => {
-    this.setState(({}) => ({
+    this.setState(() => ({
       imgData: data,
     }));
   };
