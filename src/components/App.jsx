@@ -4,6 +4,7 @@ import ImageGalleryItems from './ImageGalleryItem/ImageGalleryItem';
 import fetchImag from './API/PixabayAPI';
 import Loader from './Loader/Loader';
 import Button from './Button/Buttom';
+import Modal from './Modal/Modal';
 
 class App extends Component {
   state = {
@@ -12,6 +13,8 @@ class App extends Component {
     currentHits: 0,
     searchNameImg: '',
     isLoading: false,
+    showModal: false,
+    imgData: '',
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -19,30 +22,31 @@ class App extends Component {
       const { currentPage, searchNameImg } = this.state;
 
       try {
-        
         const response = await fetchImag(searchNameImg, currentPage);
 
         const { hits: arrImgAdd } = response;
 
         this.setState(() => ({
           img: [...arrImgAdd],
-          
         }));
       } catch (error) {
         console.error(error);
       }
     }
-
-
-      // if (prevState.searchNameImg !== this.state.searchNameImg) {
-
-      //   this.setState(() => ({
-      //     img: [],
-      //   }));
-        
-      // }
-
   }
+
+  toggaleModal = e => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+    this.getImgDate(e.target);
+  };
+
+  getImgDate = data => {
+    this.setState(({}) => ({
+      imgData: data,
+    }));
+  };
 
   addStateImg = async nameImg => {
     try {
@@ -77,8 +81,14 @@ class App extends Component {
     return (
       <>
         <Searchbar addStateImg={this.addStateImg} />
-        {this.state.isLoading && <Loader/>}
-        <ImageGalleryItems queryImg={this.state.img} />
+        {this.state.showModal && (
+          <Modal imgData={this.state.imgData} onClose={this.toggaleModal} />
+        )}
+        <ImageGalleryItems
+          onOpenModalImg={this.toggaleModal}
+          queryImg={this.state.img}
+        />
+        {this.state.isLoading && <Loader />}
         {this.state.img.length > 0 && <Button onClick={this.loadMore} />}
       </>
     );

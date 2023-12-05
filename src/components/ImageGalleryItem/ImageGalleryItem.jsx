@@ -1,9 +1,10 @@
 import React from 'react';
 import css from './ImageGalleryItem.module.css';
 
-const ImageGalleryItems = ({queryImg}) => {
+const ImageGalleryItems = ({queryImg,onOpenModalImg}) => {
  
- 
+//  console.log(queryImg);
+//  console.log(onOpenModalImg);
 
   return (
     <ul className={css.ImageGallery}>
@@ -12,7 +13,8 @@ const ImageGalleryItems = ({queryImg}) => {
           <img
             className={css.ImageGalleryItemImage}
             src={item.webformatURL}
-            alt=""
+            alt={item.tags}
+            onClick={onOpenModalImg}
           />
         </li>
       ))}
