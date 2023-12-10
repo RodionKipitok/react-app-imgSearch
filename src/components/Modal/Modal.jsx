@@ -6,13 +6,33 @@ const modalRoot = document.querySelector('#modal-root');
 
 class Modal extends Component {
   componentDidMount() {
+    
+    window.addEventListener('keydown',this.hendleKeyDown )
+
+
+ 
+  }
+
+  componentWillUnmount(){
+    window.removeEventListener('keydown',this.hendleKeyDown)
+  }
+
+
+
+  hendleKeyDown = e => {
     const { onClose } = this.props;
-    window.addEventListener('keydown', e => {
-      console.log(e.code);
-      if (e.code === 'Escape') {
-        onClose()
-      }
-    });
+
+    if (e.code === 'Escape') {
+      onClose()
+    }
+  }
+
+  hendleBackdropClick = event => {
+    const { onClose } = this.props;
+
+    if (event.currentTarget === event.target) {
+      onClose()
+    }
   }
 
   render() {
@@ -20,7 +40,7 @@ class Modal extends Component {
     console.log(imgData);
 
     return createPortal(
-      <div className={css.overlay}>
+      <div className={css.overlay} onClick={this.hendleBackdropClick}>
         <div className={css.modal}>
           <img src={imgData.src} alt={imgData.alt} />
         </div>
