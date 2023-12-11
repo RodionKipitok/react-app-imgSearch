@@ -15,31 +15,21 @@ class App extends Component {
     isLoading: false,
     showModal: false,
     imgData: '',
+   
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    if (prevState.currentPage === this.state.currentPage) {
-      const { currentPage, searchNameImg } = this.state;
-
-      try {
-        const response = await fetchImag(searchNameImg, currentPage);
-
-        const { hits: arrImgAdd } = response;
-
-        this.setState(() => ({
-          img: [...arrImgAdd],
-        }));
-      } catch (error) {
-        console.error(error);
-      }
+    if (prevState.currentPage !== this.state.currentPage) {
+      
     }
   }
 
   toggaleModal = e => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
+    
     }));
-    this.getImgDate(e.target);
+    this.getImgDate(e);
   };
 
   getImgDate = data => {
@@ -60,9 +50,6 @@ class App extends Component {
         this.setState(() => ({
           img: [...arrImgAdd],
           isLoading: false,
-        }));
-
-        this.setState(() => ({
           searchNameImg: nameImg,
         }));
       }
@@ -71,10 +58,25 @@ class App extends Component {
     }
   };
 
-  loadMore = () => {
+  loadMore = async () => {
     this.setState(prevState => ({
       currentPage: prevState.currentPage + 1,
+
     }));
+    const { currentPage, searchNameImg } = this.state;
+
+      try {
+        const response = await fetchImag(searchNameImg, currentPage);
+
+        const { hits: arrImgAdd } = response;
+
+        this.setState(() => ({
+          img: [...arrImgAdd],
+        }));
+      } catch (error) {
+        console.error(error);
+      }
+
   };
 
   render() {
@@ -91,7 +93,7 @@ class App extends Component {
               onOpenModalImg={this.toggaleModal}
               queryImg={this.state.img}
             />
-            {this.state.img.length > 0 && <Button onClick={this.loadMore} />}
+            {this.state.img.length > 0 && <Button onClick={this.loadMore} isLoading={isLoading} />}
             {this.state.showModal && (
               <Modal imgData={this.state.imgData} onClose={this.toggaleModal} />
             )}
@@ -103,4 +105,3 @@ class App extends Component {
 }
 
 export default App;
-
