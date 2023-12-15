@@ -6,14 +6,11 @@ const initialValues = {
   queryImg: '',
 };
 
-const Searchbar =({addStateImg}) => {
-
-
+const Searchbar = ({ addStateImg }) => {
   const handleOnSubmit = async (values, actions) => {
     const { queryImg } = values;
-     addStateImg(queryImg)
+    addStateImg(queryImg);
     actions.resetForm();
-    
 
     console.log(queryImg);
   };

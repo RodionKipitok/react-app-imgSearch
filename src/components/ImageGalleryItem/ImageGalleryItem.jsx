@@ -1,20 +1,20 @@
 import React from 'react';
 import css from './ImageGalleryItem.module.css';
+import { nanoid } from 'nanoid';
 
-const ImageGalleryItems = ({queryImg,onOpenModalImg}) => {
- 
-//  console.log(queryImg);
-//  console.log(onOpenModalImg);
+const ImageGalleryItems = ({ queryImg }) => {
+  console.log(queryImg);
+  //  console.log(onOpenModalImg);
 
   return (
     <ul className={css.ImageGallery}>
       {queryImg.map(item => (
-        <li key={item.id} className={css.ImageGalleryItem}>
+        <li key={nanoid()} className={css.ImageGalleryItem}>
           <img
             className={css.ImageGalleryItemImage}
             src={item.webformatURL}
             alt={item.tags}
-            onClick={onOpenModalImg}
+            // onClick={onOpenModalImg}
           />
         </li>
       ))}
@@ -23,4 +23,3 @@ const ImageGalleryItems = ({queryImg,onOpenModalImg}) => {
 };
 
 export default ImageGalleryItems;
-

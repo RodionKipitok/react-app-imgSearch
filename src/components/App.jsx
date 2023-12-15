@@ -1,104 +1,66 @@
 import React, { Component } from 'react';
-import Searchbar from './Searchbar/Searchbar';
-import ImageGalleryItems from './ImageGalleryItem/ImageGalleryItem';
-import fetchImag from './API/PixabayAPI';
+import fetchImages from './API/PixabayAPI';
 import Loader from './Loader/Loader';
+import Searchbar from 'components/Searchbar/Searchbar';
+import ImageGalleryItems from './ImageGalleryItem/ImageGalleryItem';
 import Button from './Button/Buttom';
-import Modal from './Modal/Modal';
 
 class App extends Component {
   state = {
-    img: [],
+    itemImg: [],
     currentPage: 1,
-    currentHits: 0,
     searchNameImg: '',
     isLoading: false,
-    showModal: false,
-    imgData: '',
-   
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    if (prevState.currentPage !== this.state.currentPage) {
-      
+    const { searchNameImg, currentPage, isLoading } = this.state;
+
+    if (prevState.currentPage !== currentPage) {
+      try {
+        const getImages = await fetchImages(searchNameImg, currentPage);
+        console.log(getImages);
+        this.setState(prevState => ({
+          itemImg: [...prevState.itemImg, ...getImages.hits],
+        }));
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
-  toggaleModal = e => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    
-    }));
-    this.getImgDate(e);
-  };
-
-  getImgDate = data => {
-    this.setState(() => ({
-      imgData: data,
-    }));
-  };
-
-  addStateImg = async nameImg => {
+  addStateImg = async searchName => {
     try {
-      if (nameImg !== '') {
-        const { currentPage } = this.state;
-        this.setState({ isLoading: true });
-        const response = await fetchImag(nameImg, currentPage);
-
-        const { hits: arrImgAdd } = response;
+      if (searchName !== '') {
+        this.setState({ isLoading: true, currentPage: 1 }); // Сброс currentPage перед новым поиском
+        const getImages = await fetchImages(searchName);
 
         this.setState(() => ({
-          img: [...arrImgAdd],
-          isLoading: false,
-          searchNameImg: nameImg,
+          itemImg: [...getImages.hits],
+          searchNameImg: searchName,
         }));
       }
     } catch (error) {
-      console.log(error());
+      console.log(error);
     }
   };
 
   loadMore = async () => {
     this.setState(prevState => ({
       currentPage: prevState.currentPage + 1,
-
+      isLoading: true, // Устанавливаем isLoading в true перед загрузкой следующей страницы
     }));
-    const { currentPage, searchNameImg } = this.state;
-
-      try {
-        const response = await fetchImag(searchNameImg, currentPage);
-
-        const { hits: arrImgAdd } = response;
-
-        this.setState(() => ({
-          img: [...arrImgAdd],
-        }));
-      } catch (error) {
-        console.error(error);
-      }
-
   };
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, itemImg } = this.state;
 
     return (
       <>
         <Searchbar addStateImg={this.addStateImg} />
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            <ImageGalleryItems
-              onOpenModalImg={this.toggaleModal}
-              queryImg={this.state.img}
-            />
-            {this.state.img.length > 0 && <Button onClick={this.loadMore} isLoading={isLoading} />}
-            {this.state.showModal && (
-              <Modal imgData={this.state.imgData} onClose={this.toggaleModal} />
-            )}
-          </>
-        )}
+        {isLoading && <Loader />}
+        <ImageGalleryItems queryImg={itemImg} />
+        <Button loadMore={this.loadMore} />
       </>
     );
   }
